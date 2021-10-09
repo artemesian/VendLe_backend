@@ -44,9 +44,9 @@ const resetPassword = async (req, res, next) => {
                     }
                 });
             var mailOption =
-            {
+            { 
                 to: user.email,
-                from: 'vendle01@gmail.com',
+                from: process.env.user,
                 subject: 'Vendle Reset Password',
                 text: `Code de reinitialisation de mot de passe : ${token.resettoken}`
             }

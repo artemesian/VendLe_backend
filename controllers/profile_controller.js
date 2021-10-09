@@ -5,28 +5,7 @@ BSONPure = require('bson').BSONPure
 const {ObjectID, ObjectId}=require('mongodb')
 const User = require('../models/user_model.js');
 require('dotenv').config();
-const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
-// Mongo URI
-const mongoURI = process.env.MONGO_URI;
-// Create mongo connection
-const conn = mongoose.createConnection(mongoURI,{ useUnifiedTopology: true ,useNewUrlParser: true});
-// Init gf
-let gfs;
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-	cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-	api_key:process.env.CLOUDINARY_API_KEY,
-	api_secret:process.env.CLOUDINARY_API_SECRET
-})
-conn.once('open', () => {
-  // Init stream
-  mongoose.mongo.BSONPure = BSONPure;
-  gfs = Grid(conn.db, mongoose.mongo);  
-  gfs.collection('Images');
-});
+const cloudinary=require('../cloudinary_config')
 
 
 
@@ -74,6 +53,7 @@ module.exports.deleteProfile=(req,res,next)=>{
 	})
 }
 module.exports.getProfileImage=async (req,res,next)=>{
+	/*
 	let filename=getID(req.params.filename)
 	console.log(filename);
 	gfs.files.findOne({filename:filename},(err,file)=>{
@@ -85,15 +65,19 @@ module.exports.getProfileImage=async (req,res,next)=>{
 		const readstream = gfs.createReadStream(file.filename);
       	return readstream.pipe(res);
 	})
+*/
 }
+
 
 module.exports.updateProfileImage = async (req, res) => {
 		try {
 			// Upload image to cloudinary
+			console.log('hello')
+			const uploader= await cloudinary.uploads(req.file.path,'VendLe_Profiles')
 			let id=req.params.id
-			const result = await cloudinary.uploader.upload(req.file.path);
-			console.log(result)
-			User.findOneAndUpdate({id:id},{profileUrl:{url:result.url,public_id:result.public_id}})
+			//const result = await cloudinary.uploader.upload(req.file.path);
+			console.log(uploader)
+			User.findOneAndUpdate({id:id},{image:uploader}, {returnOriginal: false})
 			.then(user=>res.status(200).json({message:'user updated successfully',user:user}))
 			.catch(err=>res.status(500).json({message:'An error occur !',error:err}))
 		  } catch (err) {

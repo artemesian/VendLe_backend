@@ -4,36 +4,6 @@ require('dotenv').config();
 const server = http.createServer(app);
 const io = require('socket.io')(http);
 
-
-io.on('connection', socket => {
-  console.log('Am connected')
-  //Get the chatID of the user and join in a room of the same chatID
-  chatID = socket.handshake.query.chatID
-  socket.join(chatID)
-
-  //Leave the room if the user closes the socket
-  socket.on('disconnect', () => {
-      console.log('Am disconnect')
-      socket.leave(chatID)
-  })
-
-  //Send message to only a particular user
-  socket.on('send_message', message => {
-      receiverChatID = message.receiverChatID
-      senderChatID = message.senderChatID
-      content = message.content
-
-      //Send message to only that particular room
-      socket.in(receiverChatID).emit('receive_message', {
-          'content': content,
-          'senderChatID': senderChatID,
-          'receiverChatID':receiverChatID,
-      })
-  })
-  socket.on('chat_direct',(data)=>{
-    console.log(data)
-  })
-});
 const normalizePort = val => {
   const port = parseInt(val, 10);
 
@@ -45,7 +15,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '5000');
+const port = normalizePort(process.env.PORT || '50002');
 app.set('port', port);
 
 const errorHandler = error => {

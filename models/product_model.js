@@ -36,8 +36,8 @@ const { Schema } = mongoose;
 		default : 0
     },
     authorID:{
-    	type:String,
-    	required:true
+    	type:Schema.Types.ObjectId,
+		ref:"User"
     },
 	 interested:[String]
     ,
@@ -53,7 +53,7 @@ const { Schema } = mongoose;
     },
     signal:{
     	value:Boolean,
-    	reason:String
+    	reason:[String]
     },
     promotionStatus:{
     	value:Boolean,

@@ -6,8 +6,18 @@ const { Schema } = mongoose;
 
 	name:{
 		type:String,
-		unique:true,
-		required:true
+		//unique:true,
+		//required:true
+	},
+	buyer:{
+		type:Schema.Types.ObjectId,
+		ref:"User",
+		required:true	
+	},
+	seller:{
+		type:Schema.Types.ObjectId,
+		ref:"User",
+		required:true	
 	},
 	product:{
 		type:Schema.Types.ObjectId,
@@ -16,7 +26,11 @@ const { Schema } = mongoose;
 	},
 	deleted:{
 		type:Boolean
-	}
+	},
+	message:[{
+		type:Schema.Types.ObjectId,
+		ref:"Message"
+	}]
     },{timestamps:true})
 module.exports=mongoose.model('Chat',chatSchema);
 /*Recommended

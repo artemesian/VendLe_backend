@@ -4,46 +4,25 @@ const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const mongoose = require('mongoose');
 const path=require('path')
-const cloudinary = require("cloudinary").v2;
-require('dotenv').config
-cloudinary.config({
-	cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-	api_key:process.env.CLOUDINARY_API_KEY,
-	api_secret:process.env.CLOUDINARY_API_SECRET
-})
-// Mongo URI
-const mongoURI = process.env.MONGO_URI;
-// Create mongo connection
-const conn = mongoose.createConnection(mongoURI,{ useUnifiedTopology: true ,useNewUrlParser: true});
-// Init gf
-let gfs;
-
-conn.once('open', () => {
-  // Init stream
-  gfs = Grid(conn.db, mongoose.mongo);  
-  gfs.collection('Images');
-});
+const cloudinary=require('../cloudinary_config')
 
 module.exports.createProduct=async (req, res, next)=>{
-	let index=req.files.length
 
-	for (let i = 0; i < req.files.length; i++) {
-		
-		
-	}
-	let results=[];
+	let urls=[];
 	let result;
-	req.files.map(async(file)=>{
-		result=await cloudinary.uploader.upload(file.path)
-		results.push(result)
-	})
-   setTimeout(() => {
-	console.log(results) 
+	const uploader=async (path)=>await cloudinary.uploads(path,'VendLe_Image')
+	for(const file of req.files){
+		const {path}=file
+		const newPath=await uploader(path)
+		urls.push(newPath)
+		fs.unlinkSync(path)
+		console.log(newPath)
+	}
+	console.log('urls',urls)
 	const product= new Product({
-		...req.body,photosUrls:results
+		...req.body,photosUrls:urls
 	})
 	product.save()
-
 	.then(Product=>{
 		res.status(200).json({
 			message:'product succesfully created',
@@ -54,7 +33,6 @@ module.exports.createProduct=async (req, res, next)=>{
 		res.status(400).json({error})
 		console.log(error)
 	}) 
-   }, 10000);
 	
 
 }

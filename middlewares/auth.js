@@ -11,7 +11,7 @@ const auth=(req,res,next)=>{
 				return res.status(500).json({auth:false,message:'bad token provide or token expire'})
 			}
 			console.log(decrypt);
-			if(req.body.userID === undefined || req.body.userID !==decrypt.user._id){
+			if(req.body.userID === undefined || req.body.userID !==decrypt.id){
 				throw 'Invalid User ID'
 			}else{
 				next();
@@ -19,6 +19,7 @@ const auth=(req,res,next)=>{
 		})
 	}
 	catch(error){
+		console.log(error)
 		res.status(401).json({error:error.message,message:'invalid request !'})
 	}
 }

@@ -1,61 +1,39 @@
-const express = require('express');
-const app = express();
-const http = require('http');
-const server=http.createServer(app);
-const socketio = require('socket.io');
 const moment = require('moment');
-const io = socketio(server);
-const database = 'mongodb://localhost:27017/';
 const Message=require('../models/message_model')
+const Chat =require('../models/chat_model')
 
-//format messsage function
-const formatMessage = (data) => {
-    msg = {
-        from:data.fromUser,
-        to:data.toUser,
-        message:data.msg,
-        date: moment().format("YYYY-MM-DD"),
-        time: moment().format("hh:mm a")
-    }
-    return msg;
+
+module.exports.createChat=(req,res,next)=>{
+	const chat = new Chat({
+		...req.body
+	})
+	chat.save()
+	.then(result=>{
+		res.status(200).json({result:result})
+	})
+	.catch(error=>res.status(500).json(error.message))
+}
+module.exports.getAllChats=(req,res,next)=>{
+	Chat.find()
+	.then(chats=>res.status(200).json({chatsList:chats}))
+	.catch(error=>res.status(404).json(error.message))
 }
 
-io.on('connection', (socket) => {
+module.exports.getOneChat=(req,res,nex)=>{
+	Chat.findOne({name:req.body.name})
+	.then(chat=>res.status(200).json({chat:chat}))
+	.catch(error=>res.status(404).json(error.message))
+}
 
-    console.log('New connection with socket',socket);
-
-    socket.on('receive_message', (data) =>{ //recieves message from client-end along with sender's and reciever's details
-        var dataElement = formatMessage(data);
-        mongoClient.connect(database, (err,db) => {
-            if (err)
-                {
-                    console.log(err.message)
-                    throw err;
-                }
-            else {
-                Message.insertOne(data, (err,res) => { //inserts message to into the database
-                    if(err) throw err;
-                    socket.emit('sent_message',data); //emits message back to the user for display
-                });
-            }
-            db.close();
-        });
-        var userID = socket.id;
-        socket.on('disconnect', () => {
-            console.log(`${userID}disconnected`)
-        }); 
-
-    });
-
-})
-
-module.exports.createMessage=(req,res,next)=>{
-    const message=new Message({
-        ...req.body
-    })
-    message.save()
-    .then((mess)=>res.status(200).json(mess))
-    .catch(error=>res.status(500).json(error.message))
+module.exports.updateChat=(req,res,next)=>{
+	Chat.updateOne({name:req.body.name},{...req.body})
+	.then(result=>res.status(200).json('Chat discussion was updated sucessfully'))
+	.catch(error=>res.status(500).json({error:error.message,message:'An error occur'}))
+}
+module.exports.deleteOneChat=(req,res,next)=>{
+deleteOne({name:req.body.name})
+.then(result=>res.status(200).json('Message was deleted sucessfully'))
+.catch(error=>res.status(404).json({error:error.message,message:'An error occur'}))
 }
 module.exports.getProductDiscussion=(req,res,next)=>{
     Message.find({sender:{id:req.params.id}})
@@ -75,5 +53,18 @@ function groupBy(table,id){
         r[a.id] = r[a.id] || [];
         r[a.id].push(a);
         return r;
+    })
+}
+module.exports.getUserChat=(req,res,next)=>{
+    Chat.find({$or:[{buyer:req.body.id},{seller:req.body.id}]})
+    .populate('buyer',{"_id":1,"username":1,"image":1})
+    .populate('seller',{"_id":1,"username":1,"image":1})
+    .populate('product')
+    .populate('message')
+    .exec()
+    .then(chats=>res.status(200).json({Chats:chats}))
+    .catch(error=>{
+        console.log(error)
+        res.status.json({error})
     })
 }

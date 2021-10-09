@@ -5,26 +5,14 @@ const { Schema } = mongoose;
 
 
   const messageSchema = new Schema({
-	sender:String
-	/*{
-		type:Schema.Types.ObjectId,
-		ref:"User"
-	}*/,
 	content:{
 		type:String,
 	},
-	receiver:String
-	/*{
-		type:Schema.Types.ObjectId,
-		ref:"User"
-	}*/,
-    discussionID:String
-	/*{
+    chatID:{
 		type:Schema.Types.ObjectId,
 		ref:"Chat",
-		required:
-		
-	}*/
+		required:true	
+	}
 },{timestamp:true})
 
 messageSchema.plugin(mongooseHistory)
