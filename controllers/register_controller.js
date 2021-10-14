@@ -4,6 +4,18 @@ const mongoose = require('mongoose');
 const User = require('../models/user_model.js');
 require('dotenv').config();
 
+module.exports.verifyUsername=(req,res,next)=>{
+
+	User.findOne({username:req.body.username},{"username":1})
+	.then(user=>{
+		console.log(user)
+		user!=null?
+			res.status(400).json({exist:true}):
+			res.status(400).json({exist:false})		
+	})
+	.catch(console.log)
+}
+
 module.exports.register=(req,res,next)=>{
 	const {email,phone,gender,birthday,password,username}=req.body;
 	console.log(req.body);

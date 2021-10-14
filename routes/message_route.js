@@ -7,7 +7,7 @@ const auth=require('../middlewares/auth.js')
 Router.post('/message',Message.createMessage)
 Router.get('/messages',Message.getAllMessages)
 Router.get('/message/:id',Message.getOneMessage)
-Router.get('/messages/:discussionID',auth,Message.getAllDiscussionMessages)
+Router.get('/messages/:discussionID',Message.getAllDiscussionMessages)
 Router.put('/message/update',Message.updateMessage)
 Router.delete('/message/delete',Message.deleteOneMessage)
 Router.delete('/messages/delete',auth,Message.deleteAllDiscussionMessage)//delete All discussion Messages
