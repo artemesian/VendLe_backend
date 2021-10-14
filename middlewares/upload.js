@@ -1,3 +1,4 @@
+/*
 const mongoose=require('mongoose');
 const gridStorage=require('multer-gridfs-storage');
 const grid=require('gridfs-stream');
@@ -14,13 +15,12 @@ connexion.once('open',()=>{
 const storage=new gridStorage({
 	url:process.env.MONGO_URI,
 	file:(req,file)=>{
-	
 		return new Promise((resolve,reject)=>{
 			const filename=file.originalname;
-			const userID=req.params.id;
+			const id=req.params.id;
 			const fileInfo={
-				filename:filename,
-				metadata:userID,
+				filename:`${Date.now()}-${id}-${filename}`,
+				//metadata:userID,
 				bucketName:'Images',
 			};
 			resolve(fileInfo);
@@ -38,6 +38,27 @@ const fileFilter = (req, file, cb) => {
 
 };
 
-const upload=multer({storage: storage, fileFilter: fileFilter}).fields([{name:'profile'}]);
+const upload=multer({storage: storage, fileFilter: fileFilter}).fields([{name:'profile'},{name:'products'}]);
 
-module.exports={upload,gfs};
+module.exports={upload};
+*/
+
+
+// Multer config
+
+
+const multer = require("multer");
+const cloudinary = require("cloudinary");
+const path = require("path");
+
+module.exports = multer({
+	storage: multer.diskStorage({}),
+	fileFilter: (req, file, cb) => {
+		let ext = path.extname(file.originalname);  
+		if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".PNG"  && ext !== ".jfif") {
+		cb(new Error("File type is not supported"), false);
+		return;
+		}
+		cb(null, true);
+	},
+});
