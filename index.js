@@ -14,11 +14,10 @@ const Catalog=require ('./routes/catalog_route.js');
 const Payment =require('./routes/payment_route.js');
 const Message =require('./routes/message_route.js');
 const forgotPassword = require('./routes/forgot_password_route.js');
-const http = require('http').createServer(app)
-const io = require('socket.io')(http);
-
 const productsHome = require('./routes/product_home_route')
 const serviceHome = require('./routes/service_home_route')
+const Country = require('./routes/country_route')
+const socket_chat=require('./sockets/chat')
 
 /*****cors error protection and data parsing*****/
 /*app.use((req, res, next) => {
@@ -28,8 +27,9 @@ const serviceHome = require('./routes/service_home_route')
   next();
 });*/
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.json({limit:"100mb"}));
+app.use(express.urlencoded({limit:"100mb"}));
+//app.use(compression())
 /*******endpoints******/
 
 
@@ -50,7 +50,9 @@ app.use ('/',forgotPassword);
 app.use ('/',Message);
 app.use ('/',Chat);
 
-
 app.use('/',productsHome)
 app.use('/', serviceHome)
+app.use('/', Country)
+
+
 module.exports=app

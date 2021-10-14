@@ -5,7 +5,12 @@ const { Schema } = mongoose;
 
 
   const messageSchema = new Schema({
-	content:{
+	sender:{
+		type:Schema.Types.ObjectId,
+		ref:"User",
+		required:true
+	},
+	body:{
 		type:String,
 	},
     chatID:{
