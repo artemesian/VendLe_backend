@@ -15,7 +15,7 @@ module.exports.createCountry=(req,res,next)=>{
     .catch(console.log)
 }
 module.exports.findCountry=(req,res,next)=>{
-    Country.find()
+    Country.find({show:true})
     .then(country=>res.status(200).json({country:country}))
     .catch(console.log)
 }
@@ -36,7 +36,7 @@ module.exports.deleteOneCountry=(req,res,next)=>{
 }
 module.exports.loadData=(req,res,next)=>{
     console.log(req.body.country)
-    Country.insertMany(req.body.country)
+    Country.updateMany({},{$set:{show:false}})
     .then(country=>res.status(200).json({country:country}))
     .catch(console.log)
 }
