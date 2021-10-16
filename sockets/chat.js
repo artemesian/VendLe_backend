@@ -15,7 +15,7 @@ io.use((socket,next)=>{
 */
 io.on('connection',(socket)=>{
   console.log("one user connected");
-  console.log(socket.id)
+  console.log(socket.socket)
   socket.on('chat_id',(data)=>{
       console.log(data)
     Message.find({discussionID:data.chat_id})

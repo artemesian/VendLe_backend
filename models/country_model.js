@@ -10,6 +10,7 @@ const countrySchema=Schema({
     dialCode:{type:String},
     flag:{type:String},
     cities:[],
+    show:Boolean
 
 })
 
