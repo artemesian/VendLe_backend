@@ -17,16 +17,19 @@ module.exports.verifyUsername=(req,res,next)=>{
 }
 
 module.exports.register=(req,res,next)=>{
-	const {email,phone,gender,birthday,password,username}=req.body;
+	const {email,number,gender,dateOfbirth,password,userName,fullName,town,countryID}=req.body;
 	console.log(req.body);
 	bcrypt.hash(password,10)
 	.then(hash=>{
 		const user = new User({
-			// email,
-			// phone,
-			// gender,
-			// birthday,
-			...req.body,
+			fullName:fullName,
+			email:email,
+			phone:number,
+			username:userName,
+			gender:gender,
+			city:town,
+			country:countryID,
+			birthday:dateOfbirth,
 			password:hash,
 			role:'user'
 		})

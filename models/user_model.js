@@ -41,7 +41,8 @@ const UserSchema=mongoose.Schema({
 		type:String,
     },
     country:{
-		type:String,
+		type:Schema.Types.ObjectId,
+		ref:"Country"
     },
     city:{
 		type:String,

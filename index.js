@@ -55,4 +55,7 @@ app.use('/', serviceHome)
 app.use('/', Country)
 
 
+/*****Chatroom routes */
+//require('./middlewares/socket')(app,io,db)
+
 module.exports=app
