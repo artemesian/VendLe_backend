@@ -5,10 +5,12 @@ const User = require("../models/user_model.js");
 require("dotenv").config();
 
 module.exports.login = (req, res, next) => {
-  const { password, phone, email, byEmail } = req.body;
+  const { password, identifier, byEmail } = req.body;
+  console.log("Login", req.body);
+
+  User().populate("country");
   if (!byEmail) {
-    console.log(req.body);
-    User.findOne({ phone })
+    User.findOne({ identifier })
       .then((user) => {
         try {
           if (!user) return res.status(404).json({ message: "user not found" });
@@ -21,21 +23,26 @@ module.exports.login = (req, res, next) => {
           let token = jwt.sign({ id: user._id }, process.env.JWT_KEY);
           res.status(200).json({
             message: `${user.username} authenticated successfully`,
-            auth: true,
-            token: token,
             user: {
               id: user._id,
               email: user.email,
-              username: user.username,
+              userName: user.userName,
               phone: user.phone,
               follower_count: user.followers.length,
               following_count: user.followings.length,
-              name: user.fullName,
-              profile_image: "",
+              fullName: user.fullName,
+              profile_image: user.profileImage ?? "",
               discussion_count: user.discussions.length,
-              country: user.country,
-              age: user.birthday,
-              favoris_count: user.favoris.length,
+              country: {
+                id: user.country._id,
+                name: user.country.name,
+                unicodeFlag: user.country.unicodeFlag,
+                dialCode: user.country.dialCode,
+                flag: user.country.flag,
+              },
+              town: user.town,
+              dateOfBirth: user.dateOfBirth,
+              token: token,
             },
           });
         } catch (error) {
@@ -46,7 +53,7 @@ module.exports.login = (req, res, next) => {
         res.status(500).json(error.message);
       });
   } else {
-    User.findOne({ email: email })
+    User.findOne({ email: identifier })
       .then((user) => {
         try {
           if (!user) return res.status(404).json({ message: "user not found" });
@@ -59,21 +66,26 @@ module.exports.login = (req, res, next) => {
           let token = jwt.sign({ id: user._id }, process.env.JWT_KEY);
           res.status(200).json({
             message: `${user.username} authenticated successfully`,
-            auth: true,
-            token: token,
             user: {
               id: user._id,
               email: user.email,
-              username: user.username,
+              userName: user.userName,
               phone: user.phone,
               follower_count: user.followers.length,
               following_count: user.followings.length,
-              name: user.fullName,
-              profile_image: "",
+              fullName: user.fullName,
+              profile_image: user.profile_image,
               discussion_count: user.discussions.length,
-              country: user.country,
-              age: user.birthday,
-              favoris_count: user.favoris.length,
+              country: {
+                id: user.country._id,
+                name: user.country.name,
+                unicodeFlag: user.country.unicodeFlag,
+                dialCode: user.country.dialCode,
+                flag: user.country.flag,
+              },
+              town: user.town,
+              dateOfBirth: user.dateOfBirth,
+              token: token,
             },
           });
         } catch (error) {
