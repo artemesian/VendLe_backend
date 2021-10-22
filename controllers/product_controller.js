@@ -4,6 +4,7 @@ const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const mongoose = require('mongoose');
 const path=require('path')
+const fs=require('fs');
 const cloudinary=require('../cloudinary_config')
 
 module.exports.createProduct=async (req, res, next)=>{
@@ -25,13 +26,14 @@ module.exports.createProduct=async (req, res, next)=>{
 	product.save()
 	.then(Product=>{
 		res.status(200).json({
+			status:true,
 			message:'product succesfully created',
 			Product:Product
 	})
 	})
 	.catch(error=>{
-		res.status(400).json({error})
-		console.log(error)
+		res.status(500).json({error:error,status:false})
+		console.log({error:error,status:false})
 	}) 
 	
 

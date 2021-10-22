@@ -33,9 +33,12 @@ module.exports.register=(req,res,next)=>{
 			password:hash,
 			role:'user'
 		})
+		user.populate('country')
+		if(!process.env.JWT_KEY)
+		return res.status(500).json({error:'Une erreur est survenu'})
 		user.save()
 		.then(user=>{
-			if(!user)
+			if(!user) 
 				return res.status(400).json({error:'user are not created'})
 			let token = jwt.sign({id:user._id},process.env.JWT_KEY);
 			res.status(200).json({auth:true,token:token,message:'account created !',
@@ -43,10 +46,10 @@ module.exports.register=(req,res,next)=>{
 				id:user._id,
                 email:user.email,
 				username:user.username,
-				phone:user.phone,
+				number:user.phone,
 				follower_count:user.followers.length,
 				following_count:user.followings.length,
-				name:user.fullName,
+				fullName:user.fullName,
 				profile_image:'',
 				discussion_count:user.discussions.length,
 				country:user.country,

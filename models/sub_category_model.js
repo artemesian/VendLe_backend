@@ -10,6 +10,7 @@ const subCategorySchema = {
 	dateUpdated:{
 		type:Date
 	},
+	type:String,
 	subCategory:[],
 	isSubCategory:Boolean,
 	parameters:[{

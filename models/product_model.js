@@ -7,8 +7,7 @@ const { Schema } = mongoose;
 		required:true
 	},
 	description:{
-		type:String,
-		required:true
+		type:String
 	},
 	contact:{
 		type:Number,
@@ -16,8 +15,9 @@ const { Schema } = mongoose;
 	photosUrls:[],
 	category:{
 		type:String,
-		required:true
+		//required:true
 	},
+	sub_cayegory:String,
 	city:{
 		type:String
 	},
@@ -28,7 +28,7 @@ const { Schema } = mongoose;
 		type:String
 	},
     price:{
-    	type:Number,
+    	type:String,
     	required:true
     },
     view:{
@@ -55,6 +55,7 @@ const { Schema } = mongoose;
     	value:Boolean,
     	reason:[String]
     },
+	quality:String,
     promotionStatus:{
     	value:Boolean,
     	planID:String
@@ -63,7 +64,8 @@ const { Schema } = mongoose;
         //status du produit (s'il est vendu ou non)
         type:String
     },
-	caracteristic:{},
+	caracteristics:[],
+	type:{type:String,required:true},//product or sevice
     history:[{
         oldrecord:[String],
         newrecord:[String],

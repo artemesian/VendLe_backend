@@ -14,6 +14,7 @@ const categorySchema = new Schema({
 		name:String,
 		type:String
 	}],
+	type:String,
 	dateUpdated:{
 		type:Date
 	},
@@ -28,6 +29,6 @@ const categorySchema = new Schema({
 
 module.exports= mongoose.model('Category', categorySchema);
 
-/*Recommended
+/*Required
 -Name
 */
