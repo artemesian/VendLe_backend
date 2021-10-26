@@ -6,14 +6,16 @@ require("dotenv").config();
 
 module.exports.login = (req, res, next) => {
   const { password, identifier, byEmail } = req.body;
-  console.log("Login", req.body);
 
   User().populate("country");
   if (!byEmail) {
     User.findOne({ identifier })
       .then((user) => {
         try {
-          if (!user) return res.status(404).json({ message: "user not found" });
+          if (!user)
+            return res
+              .status(500)
+              .json({ message: "authentication failed or incorrect password" });
           let verify = bcrypt.compareSync(password, user.password);
           console.log("verify", verify);
           if (verify == false)

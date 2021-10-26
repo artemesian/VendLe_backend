@@ -5,7 +5,8 @@ const User = require("../models/user_model.js");
 require("dotenv").config();
 
 module.exports.verifyUsername = (req, res, next) => {
-  User.findOne({ username: req.body.username }, { username: 1 })
+  console.log(req.body.userName);
+  User.findOne({ userName: req.body.userName }, { userName: 1 })
     .then((user) => {
       console.log(user);
       user != null
