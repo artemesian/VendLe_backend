@@ -1,9 +1,14 @@
 const mongoose=require('mongoose');
+const diffHistory = require('mongoose-diff-history/diffHistory')
 const { Schema } = mongoose;
 const subCategory =require('./sub_category_model.js')
 
 const categorySchema = new Schema({
 	name:{
+		type:String,
+		required:true
+	},
+	typeOfCategory:{
 		type:String,
 		required:true
 	},
@@ -26,6 +31,7 @@ const categorySchema = new Schema({
 	}]
 },{timestamps:true})
 
+categorySchema.plugin(diffHistory.plugin)
 module.exports= mongoose.model('Category', categorySchema);
 
 /*Recommended
