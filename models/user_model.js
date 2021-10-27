@@ -24,7 +24,7 @@ const UserSchema=mongoose.Schema({
 		max: [32, 'Too long, max is 32 characters'],
 		match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
 	},
-	username:{
+	userName:{
 		type:String,
 		required:true,
 		unique:true
@@ -37,7 +37,7 @@ const UserSchema=mongoose.Schema({
 	gender:{
 		type:String,
 	},
-	birthday:{
+	dateOfBirth:{
 		type:String,
     },
     country:{
@@ -66,7 +66,7 @@ const UserSchema=mongoose.Schema({
 		type:Schema.Types.ObjectId,
 		ref:"Chat"
 	}],
-    image:{},
+    profileImage:{},
     role:{
 		type:String,
     },

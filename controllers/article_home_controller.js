@@ -4,12 +4,18 @@ const UserModel = require('../models/user_model');
 const { ObjectID } = require('mongodb');
 
 module.exports.articleHome = (req,res,next)=>{
-    Product.find()
+    Product.find({},{_id:1,photosUrls:1,name:1,price:1,authorID:1,category:1})
+    .populate('authorID',{"_id":1,"fullName":1,"userName":1,"image":1,})
+    .populate('category',{"_id":1,"name":1})
+    .exec()
     .then(products => {
-        const category = products.category   
+       // const category = products.category   
         result = products.reduce(function (r, a) {
-            r[a.category] = r[a.category] || [];
-            r[a.category].push(a);
+            r[a.category._id] = r[a.category] || {name:'',id:'',articles:[],};
+            //a.mainImage=a.photosUrls[0]
+            r[a.category._id].articles.push(a);
+            r[a.category._id].name=a.category.name;
+            r[a.category._id].id=a.category._id;
             return r;
         },
          Object.create(null));
@@ -18,7 +24,28 @@ module.exports.articleHome = (req,res,next)=>{
     })
     .catch(error=> res.status(404).json(error))   
 }
-
+/*
+byCat = [
+  {
+    catID,
+    name,
+    articles: [
+      {
+        articleID,
+        mainImage,
+        title,
+        price,
+        author: {
+          authorID,
+          fullName,
+          userName,
+          profileImage,
+        }
+      }
+    ]
+  }
+]
+*/
 module.exports.topArticles = (req,res,next) => {
     Product.aggregate([
       {

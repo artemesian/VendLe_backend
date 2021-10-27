@@ -15,13 +15,17 @@ io.use((socket,next)=>{
 */
 io.on('connection',(socket)=>{
   console.log("one user connected");
-  console.log(socket.socket)
+  console.log(socket.handshake.query)
+  socket.on('join',data=>{
+    console.log(data)
+    socket.join(data.seller)
+  })
   socket.on('chat_id',(data)=>{
       console.log(data)
     Message.find({discussionID:data.chat_id})
     .populate('sender',{"username":1,"image":1,"_id":1})
 	.then(messages=>{
-        console.log(messages);
+       // console.log(messages);
         socket.emit('load_message',{messages:messages})
     })
 	.catch(error=>res.status(404).json({message:'No message for this discussion',error:error.message}))

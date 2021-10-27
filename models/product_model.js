@@ -14,8 +14,9 @@ const { Schema } = mongoose;
 	},
 	photosUrls:[],
 	category:{
-		type:String,
-		//required:true
+		type:Schema.Types.ObjectId,
+		ref:"Category",
+		required:true
 	},
 	sub_cayegory:String,
 	city:{
