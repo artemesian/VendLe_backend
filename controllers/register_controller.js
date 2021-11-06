@@ -48,6 +48,7 @@ module.exports.register = (req, res, next) => {
       user
         .save()
         .then((user) => {
+          console.log(user)
           if (!user)
             return res.status(400).json({ error: "user are not created" });
           let token = jwt.sign({ id: user._id }, process.env.JWT_KEY);

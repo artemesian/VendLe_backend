@@ -27,6 +27,7 @@ category.save()
 module.exports.getAllCategory=(req, res, next)=>{
    Category.find()
    .then(Category=>{
+	   console.log(Category)
    	 res.status(200).json({Category:Category})
    })
 

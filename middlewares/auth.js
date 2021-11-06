@@ -1,4 +1,5 @@
 const jwt =require('jsonwebtoken');
+const User =require('../models/user_model')
 
 const auth=(req,res,next)=>{
 	try{
@@ -11,11 +12,16 @@ const auth=(req,res,next)=>{
 				return res.status(500).json({auth:false,message:'bad token provide or token expire'})
 			}
 			console.log(decrypt);
+			User.find({_id:decrypt.id})
+			.then(user=>next())
+			.catch(error=>res.status(404).json({message:'Votre token a expiré'}))
+			/*
 			if(req.body.userID === undefined || req.body.userID !==decrypt.id){
 				throw 'Invalid User ID'
 			}else{
 				next();
 			}
+			*/
 		})
 	}
 	catch(error){
