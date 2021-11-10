@@ -13,6 +13,7 @@ const { Schema } = mongoose;
 		type:Number,
 	},
 	photosUrls:[],
+	mainUrl:{},
 	category:{
 		type:Schema.Types.ObjectId,
 		ref:"Category",
@@ -40,7 +41,10 @@ const { Schema } = mongoose;
     	type:Schema.Types.ObjectId,
 		ref:"User"
     },
-	 interested:[String]
+	 interested:[{
+    	type:Schema.Types.ObjectId,
+		ref:"User"
+    }]//repertorier tous ceux qui ont liké un produit 
     ,
     dateCreated:{
     	type:Date,
@@ -66,6 +70,13 @@ const { Schema } = mongoose;
         type:String
     },
 	caracteristics:[],
+	contact:{
+		type:Number,
+		required:true
+	},
+	evaluation:{
+		type:Number
+	},
 	type:{type:String,required:true},//product or sevice
     history:[{
         oldrecord:[String],
@@ -81,4 +92,11 @@ module.exports=mongoose.model('Product',ProductSchema);
 -Name
 -Description
 -Category
+*/
+
+/*recommended
+-Name
+-Description
+-Category
+-contact
 */

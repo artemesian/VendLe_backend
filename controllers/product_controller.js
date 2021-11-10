@@ -24,7 +24,7 @@ module.exports.createProduct = async (req, res, next) => {
 		if (urls == [])
 			res.status(500).json({ message: "sorry an error occur" })
 		const product = new Product({
-			...req.body, photosUrls: urls
+			...req.body, photosUrls: urls,mainUrl:urls[0]
 		})
 		product.save()
 			.then(Product => {

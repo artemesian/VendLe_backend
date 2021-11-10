@@ -4,7 +4,7 @@ const UserModel = require('../models/user_model');
 const { ObjectID } = require('mongodb');
 
 module.exports.articleHome = (req,res,next)=>{
-    Product.find({},{_id:1,photosUrls:1,name:1,price:1,authorID:1,category:1})
+    Product.find({},{_id:1,mainUrl:1,name:1,price:1,authorID:1,category:1})
     .populate('authorID',{"_id":1,"fullName":1,"userName":1,"image":1,})
     .populate('category',{"_id":1,"name":1})
     .exec()
@@ -24,28 +24,7 @@ module.exports.articleHome = (req,res,next)=>{
     })
     .catch(error=> res.status(404).json(error))   
 }
-/*
-byCat = [
-  {
-    catID,
-    name,
-    articles: [
-      {
-        articleID,
-        mainImage,
-        title,
-        price,
-        author: {
-          authorID,
-          fullName,
-          userName,
-          profileImage,
-        }
-      }
-    ]
-  }
-]
-*/
+
 module.exports.topArticles = (req,res,next) => {
     Product.aggregate([
       {

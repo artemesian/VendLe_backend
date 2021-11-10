@@ -87,8 +87,8 @@ module.exports.getUserChat = (req, res, next) => {
   Chat.find({ $or: [{ buyer: req.params.id }, { seller: req.params.id }] },{message:0})
     .populate("buyer", { _id: 1, userName: 1,fullName:1, image: 1 })
     .populate("seller", { _id: 1, userName: 1,fullName:1, image: 1 })
-    .populate("product",{_id:1,name:1,photosUrls:1,price:1})
-    .populate("message")
+    .populate("product",{_id:1,name:1,mainUrl:1,price:1})
+    //.populate("message")
     .exec()
     .then((chats) => res.status(200).json({ Chats: chats }))
     .catch((error) => {

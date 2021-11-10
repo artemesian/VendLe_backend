@@ -6,6 +6,7 @@ const auth=require('../middlewares/auth.js')
 
 Router.post('/message',Message.createMessage)
 Router.get('/messages',Message.getAllMessages)
+Router.get('/message/:room',Message.getRoomMessage)
 Router.get('/message/:id',Message.getOneMessage)
 Router.get('/messages/:discussionID',Message.getAllDiscussionMessages)
 Router.put('/message/update',Message.updateMessage)

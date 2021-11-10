@@ -81,3 +81,12 @@ module.exports.updateMessage=(req,res,next)=>{
 	.then(message=>res.status(200).json({message:'message was updated successfully !',Message:message}))
 	.catch(error=>res.status(404).json({message:'message was not updated !',error:error.message}))
 }
+module.exports.getRoomMessage=(req,res,next)=>{
+	Message.find({ room: req.params.room })
+      .populate('sender', { "userName": 1, "image": 1, "_id": 1 })
+      .then(messages => {
+         console.log(messages);
+        res.status(200).json({ messages: messages })
+      })
+      .catch(error => res.status(500).json({ messages: [], error: error.message }))
+}
