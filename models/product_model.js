@@ -77,6 +77,7 @@ const { Schema } = mongoose;
 	evaluation:{
 		type:Number
 	},
+	viewers:[],
 	type:{type:String,required:true},//product or sevice
     history:[{
         oldrecord:[String],

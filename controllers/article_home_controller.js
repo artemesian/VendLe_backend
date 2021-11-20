@@ -8,7 +8,7 @@ module.exports.articleHome = (req,res,next)=>{
     .populate('authorID',{"_id":1,"fullName":1,"userName":1,"image":1,})
     .populate('category',{"_id":1,"name":1})
     .exec()
-    .then(products => {
+    .then(products => {$
        // const category = products.category   
         result = products.reduce(function (r, a) {
             r[a.category._id] = r[a.category] || {name:'',id:'',articles:[],};
