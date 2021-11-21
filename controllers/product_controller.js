@@ -182,3 +182,24 @@ function groupBy(list, fn) {
 function getID(id) {
 	return id;
 }
+module.exports.updateView=(req,res,next)=>{
+
+	Product.findOne({_id:req.params.id})
+	.then(result=>{
+		if(!result.viewers.includes(req.body.viewer_id))
+		{
+			Product.findOneAndUpdate({_id:req.params.id},{$push:{viewers:req.body.viewer_id}},{new:1})
+			.then(result=>res.status(200).json({views:result.viewers.length}))
+			.catch(error=>{
+				console.log(error);
+				res.status(500).json(error)
+			})
+		}else{
+			res.status(200).json({views:result.viewers.length})
+		}
+	})
+	.catch(error=>{
+		console.log(error);
+		res.status(500).json(error)
+	})
+}

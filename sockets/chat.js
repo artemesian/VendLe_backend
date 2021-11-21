@@ -50,3 +50,31 @@ io.on('connection', (socket) => {
     console.log('one user disconnected')
   })
 })
+/*
+const io = require('socket.io')(50001);
+
+io.on('connection', socket => {
+    //Get the chatID of the user and join in a room of the same chatID
+    chatID = socket.handshake.query.room
+    socket.join(chatID)
+
+    //Leave the room if the user closes the socket
+    socket.on('disconnect', () => {
+        socket.leave(chatID)
+    })
+
+    //Send message to only a particular user
+    socket.on('send_message', message => {
+        room = message.room
+        sender = message.sender
+        body = message.body
+
+        //Send message to only that particular room
+        socket.in(chatID).emit('receive_message', {
+            'body': body,
+            'sender': sender,
+            'room':room,
+        })
+    })
+});
+*/
