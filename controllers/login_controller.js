@@ -7,9 +7,9 @@ require("dotenv").config();
 module.exports.login = (req, res, next) => {
   const { password, identifier, byEmail } = req.body;
 
+  User().populate("country");
   if (!byEmail) {
     User.findOne({ identifier })
-      .populate("country")
       .then((user) => {
         try {
           if (!user)
@@ -19,7 +19,7 @@ module.exports.login = (req, res, next) => {
           let verify = bcrypt.compareSync(password, user.password);
           console.log("verify", verify);
           if (verify == false)
-            return res
+            res
               .status(500)
               .json({ message: "authentication failed or incorrect password" });
           let token = jwt.sign({ id: user._id }, process.env.JWT_KEY);
@@ -56,13 +56,13 @@ module.exports.login = (req, res, next) => {
       });
   } else {
     User.findOne({ email: identifier })
-      .populate("country")
       .then((user) => {
         try {
           if (!user) return res.status(404).json({ message: "user not found" });
           let verify = bcrypt.compareSync(password, user.password);
+          console.log("verify", verify);
           if (verify == false)
-            return res
+            res
               .status(500)
               .json({ message: "authentication failed or incorrect password" });
           let token = jwt.sign({ id: user._id }, process.env.JWT_KEY);
@@ -92,11 +92,10 @@ module.exports.login = (req, res, next) => {
           });
         } catch (error) {
           console.log(error.message);
-          res.status(500).json({ message: error.message });
         }
       })
       .catch((error) => {
-        res.status(500).json({ message: error.message });
+        res.status(500).json(error.message);
       });
   }
 };
