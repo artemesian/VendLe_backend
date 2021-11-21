@@ -1,12 +1,15 @@
-const express = require('express');
-const Router =express.Router();
-const {serviceHome,topService,servicePeerUser,serviceCategoryPeerUser} = require('../controllers/service_home_controller')
+const express = require("express");
+const Router = express.Router();
+const {
+  serviceHome,
+  topService,
+  servicePerUser,
+  serviceCategoryPerUser,
+} = require("../controllers/service_home_controller");
 
-Router.get('/service/bycategory', serviceHome)
-Router.get('/topService',topService)
-Router.get('/service/servicePeerUser',servicePeerUser)
-Router.get('/service/serviceCategoryPeerUser',serviceCategoryPeerUser)
+Router.get("/service/bycategory", serviceHome);
+Router.get("/topService", topService);
+Router.get("/service/servicePerUser", servicePerUser);
+Router.get("/service/serviceCategoryPerUser", serviceCategoryPerUser);
 
-
-
-module.exports = Router
+module.exports = Router;
