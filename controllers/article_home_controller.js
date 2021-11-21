@@ -44,59 +44,23 @@ module.exports.topArticles = (req, res, next) => {
   Product.aggregate([
     {
       $project: {
-        name: {
-          $max: "$name",
-        },
-        description: {
-          $max: "$description",
-        },
-        contact: {
-          $max: "$contact",
-        },
-        photosUrls: [
-          {
-            $max: "$photosUrls",
-          },
-        ],
-        category: {
-          $max: "$category",
-        },
-        city: {
-          $max: "$city",
-        },
-        country: {
-          $max: "$country",
-        },
-        quarter: {
-          $max: "$quarter",
-        },
-        price: {
-          $max: "$price",
-        },
-        view: {
-          $max: "$view",
-        },
-        dateCreated: {
-          $max: "dateCreated",
-        },
-        dateUpdated: {
-          $max: "$dateUpdated",
-        },
-        like: {
-          $max: "$like",
-        },
-        signal: {
-          $max: "$signal",
-        },
-        promotionStatus: {
-          $max: "$promotionStatus",
-        },
-        status: {
-          $max: "$status",
-        },
-        history: {
-          $max: "$history",
-        },
+        name:1,
+        description:1,
+        contact: 1,
+        mainUrl:1,
+        category:1,
+        city:1,
+        country:1,
+        quarter:1,
+        price:1,
+        view:1,
+        dateCreated:1,
+        dateUpdated:1,
+        like:1,
+        signal:1,
+        promotionStatus:1,
+        status:1,
+        history:1,
       },
     },
     {
