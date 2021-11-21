@@ -19,6 +19,8 @@ const UserSchema = mongoose.Schema(
       trim: true,
       unique: true,
       lowercase: true,
+      min: [5, "Too short, min is 5 characters"],
+      max: [32, "Too long, max is 32 characters"],
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
     },
     userName: {
@@ -65,10 +67,7 @@ const UserSchema = mongoose.Schema(
         ref: "Chat",
       },
     ],
-    image: {
-      type: String,
-      default: "",
-    },
+    image: {},
     role: {
       type: String,
     },
