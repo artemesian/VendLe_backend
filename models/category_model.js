@@ -12,9 +12,11 @@ const categorySchema = new Schema({
 		type:String,
 		required:true
 	},
-	iconsUrl:String,
-	subCategory:[subCategory],
-	isSubCategory:Boolean,
+	iconsUrl:{},
+	parent:{
+		type:Schema.Types.ObjectId,
+		ref:"Category"
+	},
 	parameters:[{
 		name:String,
 		type:String

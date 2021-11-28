@@ -84,6 +84,7 @@ function groupBy(table, id) {
   });
 }
 module.exports.getUserChat = (req, res, next) => {
+  console.log(req.params.id)
   Chat.find({ $or: [{ buyer: req.params.id }, { seller: req.params.id }] },{message:0})
     .populate("buyer", { _id: 1, userName: 1,fullName:1, image: 1 })
     .populate("seller", { _id: 1, userName: 1,fullName:1, image: 1 })

@@ -6,6 +6,7 @@ const Category= require('../controllers/category_controller.js')
 router.post('/category/create', Category.createCategory)
 router.get('/category', Category.getAllCategory)
 router.get('/category/one', Category.getOneCategory)
+router.get('/category/sub/:id', Category.getSubCategory)
 router.put('/category/update', Category.updateOneCategory)
 router.delete('/Category/delete', Category.deleteCategory)
 

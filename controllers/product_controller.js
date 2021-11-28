@@ -12,6 +12,7 @@ module.exports.createProduct = async (req, res, next) => {
 	let urls = [];
 	let result;
 	try {
+		console.log(req.body)
 		const uploader = async (path) => await cloudinary.uploads(path, 'VendLe_Image')
 		for (const file of req.files) {
 			const { path } = file
@@ -20,9 +21,10 @@ module.exports.createProduct = async (req, res, next) => {
 			fs.unlinkSync(path)
 			console.log(newPath)
 		}
-		console.log('urls', urls)
+		//console.log('urls', urls)
+		console.log(req.body.type)
 		if (urls == [])
-			res.status(500).json({ message: "sorry an error occur" })
+			res.status(500).json({ message: "sorry an error occur" ,status:false})
 		const product = new Product({
 			...req.body, photosUrls: urls,mainUrl:urls[0]
 		})
@@ -31,7 +33,7 @@ module.exports.createProduct = async (req, res, next) => {
 				res.status(200).json({
 					status: true,
 					message: 'product succesfully created',
-					Product: Product
+					//Product: Product
 				})
 			})
 			.catch(error => {
@@ -188,14 +190,14 @@ module.exports.updateView=(req,res,next)=>{
 	.then(result=>{
 		if(!result.viewers.includes(req.body.viewer_id))
 		{
-			Product.findOneAndUpdate({_id:req.params.id},{$push:{viewers:req.body.viewer_id}},{new:1})
+			Product.findOneAndUpdate({_id:req.params.id},{$push:{viewers:req.body.viewer_id},$inc:{views:1}},{new:1})
 			.then(result=>res.status(200).json({views:result.viewers.length}))
 			.catch(error=>{
 				console.log(error);
 				res.status(500).json(error)
 			})
 		}else{
-			res.status(200).json({views:result.viewers.length})
+			res.status(200).json({views:result.views})
 		}
 	})
 	.catch(error=>{

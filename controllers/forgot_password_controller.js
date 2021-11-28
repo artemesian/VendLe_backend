@@ -39,14 +39,14 @@ const resetPassword = async (req, res, next) => {
                 ({
                     service: 'gmail',
                     auth: {
-                        user: process.env.user,
-                        pass: process.env.pass
+                        user:"mopigaetan007@gmail.com",
+                        pass:"Gaetan007@google"
                     }
                 });
             var mailOption =
             { 
                 to: user.email,
-                from: process.env.user,
+                from: "mopigaetan007@gmail.com",
                 subject: 'Vendle Reset Password',
                 text: `Code de reinitialisation de mot de passe : ${token.resettoken}`
             }

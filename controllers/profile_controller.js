@@ -75,18 +75,15 @@ module.exports.updateProfileImage = async (req, res) => {
 			console.log('hello')
 			const uploader= await cloudinary.uploads(req.file.path,'VendLe_Profiles')
 			let id=req.params.id
+			console.log(id)
 			//const result = await cloudinary.uploader.upload(req.file.path);
-			console.log(uploader)
-			User.findOneAndUpdate({id:id},{image:uploader}, {returnOriginal: false})
+			User.findOneAndUpdate({_id:id},{image:uploader}, {returnOriginal: false})
 			.then(user=>res.status(200).json({message:'user updated successfully',user:user}))
 			.catch(err=>res.status(500).json({message:'An error occur !',error:err}))
 		  } catch (err) {
 			console.log(err);
 			res.status(500).json({message:'An error occur !',error:err})
 		  }
-	//if(req.files.profile==null)return res.status(500).json('Aucune image selectionnéé');
-	//const url=`http://localhost:50002/profile/image/${req.files.profile[0].filename}`
-	//return res.status(200).json(req.files.url)
 }
 
 

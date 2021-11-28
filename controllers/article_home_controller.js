@@ -1,7 +1,6 @@
 const Product = require("../models/product_model");
 const categorySchema = require("../models/category_model");
 const UserModel = require("../models/user_model");
-const { ObjectID } = require("mongodb");
 
 module.exports.articleHome = (req, res, next) => {
   Product.find()
@@ -41,42 +40,13 @@ module.exports.articleHome = (req, res, next) => {
 };
 
 module.exports.topArticles = (req, res, next) => {
-  Product.aggregate([
-    {
-      $project: {
-        name:1,
-        description:1,
-        contact: 1,
-        mainUrl:1,
-        category:1,
-        city:1,
-        country:1,
-        quarter:1,
-        price:1,
-        view:1,
-        dateCreated:1,
-        dateUpdated:1,
-        like:1,
-        signal:1,
-        promotionStatus:1,
-        status:1,
-        history:1,
-      },
-    },
-    {
-      $limit: 10,
-    },
-    {
-      $sort: {
-        view: -1,
-      },
-    },
-    {
-      $limit: 10,
-    },
-  ])
-    .then((topproduct) => res.status(200).json(topproduct))
-    .catch((error) => res.status(404).json(error));
+  Product.find({},{_id:1,name:1,"mainUrl.url":1,price:1,authorID:1,type:1,views:1}).sort({"views":-1}).limit(20)
+  .populate('authorID',{_id:1,fullName:1,userName:1,"image.url":1})
+    .then(result => res.status(200).json(result))
+    .catch((error) => {
+      res.status(500).json(error.message)
+      console.log(error)
+    });
 };
 
 module.exports.productPerUser = (req, res, next) => {
