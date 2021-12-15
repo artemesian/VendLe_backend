@@ -36,7 +36,7 @@ module.exports.articleHome = (req, res, next) => {
 
       res.status(200).json({ result: Object.values(result) });
     })
-    .catch((error) => res.status(404).json({ result: error }));
+    .catch((error) => res.status(404).json({ error: error }));
 };
 
 module.exports.topArticles = (req, res, next) => {

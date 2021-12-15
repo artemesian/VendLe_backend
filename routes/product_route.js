@@ -9,7 +9,7 @@ router.get('/product/one', Product.getOneProduct)
 router.put('/product/update', Product.updateOneProduct)
 router.put('/product/image/update/:id',upload.array("products"), Product.updateProductImage)
 router.delete('/product/delete', Product.deleteProduct)
-router.get('/product/group', Product.getProductCategory)
+router.post('/product/category/:category', Product.getProductCategory)
 router.get('/product/image/:id/:filename', Product.getProductImage)
 router.put('/product/view/:id',Product.updateView)
 module.exports = router;

@@ -72,20 +72,18 @@ const UserSchema = mongoose.Schema(
       type: String,
     },
     favoris: [
+
       {
-        id: {
-          type: Schema.Types.ObjectId,
-          ref: "Product",
-        },
-        type: String,
-      },
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      }
     ],
     /*service:[{
-			type:Schema.Types.ObjectId,
-			ref:"Service"
-		}],
-		
-	},*/
+      type:Schema.Types.ObjectId,
+      ref:"Service"
+    }],
+  	
+  },*/
     history: [
       {
         collectionName: String,

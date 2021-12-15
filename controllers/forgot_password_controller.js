@@ -38,19 +38,21 @@ const resetPassword = async (req, res, next) => {
             var Transporter = nodemailer.createTransport
                 ({
                     service: 'gmail',
+                    port:465,
+                    secure:true,
                     auth: {
                         user:"mopigaetan007@gmail.com",
                         pass:"Gaetan007@google"
                     }
                 });
-            var mailOption =
+            var mailOptions =
             { 
                 to: user.email,
                 from: "mopigaetan007@gmail.com",
                 subject: 'Vendle Reset Password',
                 text: `Code de reinitialisation de mot de passe : ${token.resettoken}`
             }
-            Transporter.sendMail(mailOption, function (err, data) {
+            Transporter.sendMail(mailOptions, function (err, data) {
                 if (err) {
                     console.log('Error Occurs', err);
                     res

@@ -6,9 +6,10 @@ const mongoose = require('mongoose');
 const path = require('path')
 const fs = require('fs');
 const cloudinary = require('../cloudinary_config')
+// const redis_client = require('../middlewares/redis')
+const redis = require('redis');
 
 module.exports.createProduct = async (req, res, next) => {
-
 	let urls = [];
 	let result;
 	try {
@@ -24,9 +25,9 @@ module.exports.createProduct = async (req, res, next) => {
 		//console.log('urls', urls)
 		console.log(req.body.type)
 		if (urls == [])
-			res.status(500).json({ message: "sorry an error occur" ,status:false})
+			res.status(500).json({ message: "sorry an error occur", status: false })
 		const product = new Product({
-			...req.body, photosUrls: urls,mainUrl:urls[0]
+			...req.body, photosUrls: urls, mainUrl: urls[0]
 		})
 		product.save()
 			.then(Product => {
@@ -147,18 +148,38 @@ module.exports.getProductImage = async (req, res, next) => {
 	})
 }
 //regroupe par categorie avec le authorID
-module.exports.getProductCategory = (req, res, next) => {
-	//authorID:req.body.authorID
+module.exports.getProductCategory = async(req, res, next) => {
+	/*console.log("hello");
+	const redis_client = redis.createClient();
+	redis_client.on('error', (err) => console.log('Redis Client Error', err));
+	await redis_client.connect();
+	let product_key = "product_category" + req.body.skip
+	try {
+		await redis_client.get(product_key, async (err, recipe) => {
+			console.log(err)
+			if (recipe) {
+				return res.status(200).json({
+					error: false,
+					products: JSON.parse(recipe),
+					message: `recipe for ${product_key} from the server cache`
+				})
+			} else {*/
+				Product.find({category:req.params.category}).skip(req.body.skip).limit(10)
+					.then(async products => {
+						//await redis_client.setEx(product_key, 1440, JSON.stringify(products))
+						return res.status(200).json({
+							error: false,
+							products: products,
+							message: `recipe from the database server`
+						})
+					})
+					.catch(error => console.log(error.message));
+			//}
+		//})
+	//} catch (err) {
+	// 	console.log(err)
+	// }
 
-	Product.find()
-		.then(products => {
-			console.log(products)
-			res.json(groupBy(products, function (item) {
-				return [item.category, item.authorID]
-			}))
-
-		})
-		.catch(error => console.log(error.message));
 }
 
 function arrayFromObject(obj) {
@@ -184,24 +205,23 @@ function groupBy(list, fn) {
 function getID(id) {
 	return id;
 }
-module.exports.updateView=(req,res,next)=>{
+module.exports.updateView = (req, res, next) => {
 
-	Product.findOne({_id:req.params.id})
-	.then(result=>{
-		if(!result.viewers.includes(req.body.viewer_id))
-		{
-			Product.findOneAndUpdate({_id:req.params.id},{$push:{viewers:req.body.viewer_id},$inc:{views:1}},{new:1})
-			.then(result=>res.status(200).json({views:result.viewers.length}))
-			.catch(error=>{
-				console.log(error);
-				res.status(500).json(error)
-			})
-		}else{
-			res.status(200).json({views:result.views})
-		}
-	})
-	.catch(error=>{
-		console.log(error);
-		res.status(500).json(error)
-	})
+	Product.findOne({ _id: req.params.id })
+		.then(result => {
+			if (!result.viewers.includes(req.body.viewer_id)) {
+				Product.findOneAndUpdate({ _id: req.params.id }, { $push: { viewers: req.body.viewer_id }, $inc: { views: 1 } }, { new: 1 })
+					.then(result => res.status(200).json({ views: result.viewers.length }))
+					.catch(error => {
+						console.log(error);
+						res.status(500).json(error)
+					})
+			} else {
+				res.status(200).json({ views: result.views })
+			}
+		})
+		.catch(error => {
+			console.log(error);
+			res.status(500).json(error)
+		})
 }
